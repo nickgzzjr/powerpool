@@ -264,16 +264,17 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
             self.last_signal = time.time()
         try:
             # request local memory pool and load it in
-            bt = self.call_rpc('getblocktemplate',
-                               {'capabilities': [
-                                   'coinbasevalue',
-                                   'coinbase/append',
-                                   'coinbase',
-                                   'generation',
-                                   'time',
-                                   'transactions/remove',
-                                   'prevblock',
-                               ]})
+            # bt = self.call_rpc('getblocktemplate',
+            #                    {'capabilities': [
+            #                        'coinbasevalue',
+            #                        'coinbase/append',
+            #                        'coinbase',
+            #                        'generation',
+            #                        'time',
+            #                        'transactions/remove',
+            #                        'prevblock',
+            #                    ]})
+            bt = self.call_rpc('getblocktemplate')
         except RPCException:
             return False
 
@@ -357,10 +358,14 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
         extranonce_length = (self.manager.config['extranonce_size'] +
                              self.manager.config['extranonce_serv_size'])
         coinbase.inputs.append(
+            # Input.coinbase(self._last_gbt['height'],
+            #                addtl_push=[mm_data] if mm_data else [],
+            #                extra_script_sig=b'\0' * extranonce_length,
+            #                desc_string=self.config['coinbase_string']))
+
             Input.coinbase(self._last_gbt['height'],
                            addtl_push=[mm_data] if mm_data else [],
-                           extra_script_sig=b'\0' * extranonce_length,
-                           desc_string=self.config['coinbase_string']))
+                           extra_script_sig=b'\0' * extranonce_length))
 
         coinbase_value = self._last_gbt['coinbasevalue']
 

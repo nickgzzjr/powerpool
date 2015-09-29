@@ -86,6 +86,7 @@ class MonitorNetworkMulti(Jobmanager):
 
         # If we have some new information, adjust accordingly
         if new_price_data:
+            self.logger.info("{}".format(new_price_data))
             self.logger.info("Updated price information for {}"
                              .format(new_price_data.keys()))
             # Atomic update in gevent
